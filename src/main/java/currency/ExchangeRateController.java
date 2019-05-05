@@ -25,13 +25,13 @@ public class ExchangeRateController {
         return new ExchangeRate(code, date);
     }
 
-        @ExceptionHandler(value = IllegalArgumentException.class)
-        public ResponseEntity<Object>  handleIllegalArgumentException(IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-        @ExceptionHandler(value = NotFoundException.class)
-        public ResponseEntity<Object>  handleNotFoundException(NotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<Object>  handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(value = NotFoundException.class)
+    public ResponseEntity<Object>  handleNotFoundException(NotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
 

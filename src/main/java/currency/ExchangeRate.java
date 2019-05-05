@@ -36,31 +36,30 @@ public class ExchangeRate {
 
         SimpleDateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat newDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                Date parsedDate = null;
-                try {
-                        parsedDate = oldDateFormat.parse(date);
-                }
-                catch(ParseException e){
-                        throw new IllegalArgumentException("Requested date can't be parsed");
-                }
-                String reqDate = newDateFormat.format(parsedDate);
+        Date parsedDate = null;
+        try {
+             parsedDate = oldDateFormat.parse(date);
+        }
+        catch(ParseException e){
+            throw new IllegalArgumentException("Requested date can't be parsed");
+        }
+        String reqDate = newDateFormat.format(parsedDate);
 
-                String reqCode = codesMap.get(code);
-                if (reqCode == null){
-                                throw new IllegalArgumentException("Requested code doesn't correspond to any currency");
-                }
+        String reqCode = codesMap.get(code);
+        if (reqCode == null){
+            throw new IllegalArgumentException("Requested code doesn't correspond to any currency");
+        }
 
-                Map<String,String> urlVariables = new HashMap<String,String>();
-                urlVariables.put("date1", reqDate);
-                urlVariables.put("date2", reqDate);
-                urlVariables.put("code", reqCode);
-
-                RestTemplate restTemplate = new RestTemplate();
-                String rateResponse = restTemplate.getForObject("http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date1}&date_req2={date2}&VAL_NM_RQ={code}", String.class, urlVariables);
-                Matcher matcher = Pattern.compile("<Value>(.*)</Value>").matcher(rateResponse);
-                if (!matcher.find()){
-                        throw new NotFoundException("No information available for requested code and date");
-                }
+        Map<String,String> urlVariables = new HashMap<String,String>();
+        urlVariables.put("date1", reqDate);
+        urlVariables.put("date2", reqDate);
+        urlVariables.put("code", reqCode);
+        RestTemplate restTemplate = new RestTemplate();
+        String rateResponse = restTemplate.getForObject("http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1={date1}&date_req2={date2}&VAL_NM_RQ={code}", String.class, urlVariables);
+        Matcher matcher = Pattern.compile("<Value>(.*)</Value>").matcher(rateResponse);
+        if (!matcher.find()){
+            throw new NotFoundException("No information available for requested code and date");
+        }
         this.rate = matcher.group(1);
     }
 
@@ -75,6 +74,4 @@ public class ExchangeRate {
     public String getDate() {
         return date;
     }
-
 }
-
