@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: currency-deployment
+  labels:
+    app: currency
+spec:
+  replicas: 3
+  minReadySeconds: 10
+  progressDeadlineSeconds: 600
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: currency
+  template:
+    metadata:
+      labels:
+        app: currency
+    spec:
+      hostAliases:
+      - ip: "212.40.192.49"
+        hostnames:
+        - "www.cbr.ru"
+      containers:
+      - name: currency-rate
+        image: newfeya/currency-rate-service:2.0.0
+        readinessProbe:
+          periodSeconds: 1
+          httpGet:
+            path: /api/rate/USD/2015-09-24
+            port: 8080
+        livenessProbe:
+          httpGet:
+            path: /api/rate/USD/2015-09-24
+            port: 8080
+        ports:
+        - containerPort: 8080
+
