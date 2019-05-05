@@ -27,7 +27,7 @@ spec:
         - "www.cbr.ru"
       containers:
       - name: currency-rate
-        image: newfeya/currency-rate-service:2.0.0
+        image: newfeya/currency-rate-service:1.0.0
         readinessProbe:
           periodSeconds: 1
           httpGet:
